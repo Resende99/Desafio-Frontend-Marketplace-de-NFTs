@@ -430,17 +430,51 @@ test('seção 9.11 formulários permitem teclado e preservam foco', async ({ pag
   await expect.poll(() => page.getByLabel('E-mail').evaluate(input => (input as HTMLInputElement).validity.valueMissing)).toBe(true)
 })
 
-test('seção 9.11 menu mobile mantém foco no diálogo e devolve ao acionador ao fechar', async ({ page }) => {
+test('seção 9.11 menu mobile tem tema escuro, mantém foco e fecha com Escape', async ({ page }) => {
   await fresh(page)
   const trigger = page.getByRole('button', { name: 'Abrir menu' })
   test.skip(!(await trigger.isVisible()), 'menu de diálogo só é exibido no layout mobile')
   await trigger.click()
   const dialog = page.getByRole('dialog', { name: 'Menu' })
   await expect(dialog).toBeVisible()
+  await expect.poll(() => dialog.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(36, 22, 18)')
+  await expect(page.getByRole('button', { name: 'Fechar menu' })).toBeFocused()
+  await page.keyboard.press('Shift+Tab')
+  await expect(page.getByRole('link', { name: 'Sacola', exact: true })).toBeFocused()
+  await page.keyboard.press('Tab')
   await expect(page.getByRole('button', { name: 'Fechar menu' })).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(dialog).not.toBeVisible()
   await expect(trigger).toBeFocused()
+})
+
+test('auth, filtros e recibo permanecem utilizáveis em larguras mobile, tablet e desktop', async ({ page }) => {
+  await fresh(page)
+  for (const width of [390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/login')
+    await expect(page.locator('.auth-card')).toBeVisible()
+    await page.goto('/register')
+    await expect(page.locator('.auth-card')).toBeVisible()
+    await page.goto('/')
+    await expect(page.locator('.toolbar')).toBeVisible()
+    await expect(page.locator('.category-row')).toBeVisible()
+  }
+
+  await addToCart(page, 'nft-001')
+  await register(page, '/cart')
+  await checkout(page, 'b')
+  await page.getByRole('button', { name: 'Confirmar compra' }).click()
+  await expect(page.getByText('Pagamento pendente')).toBeVisible()
+  for (const width of [390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    const receipt = page.locator('.receipt-card')
+    await expect(receipt).toBeVisible()
+    const bounds = await receipt.boundingBox()
+    expect(bounds).not.toBeNull()
+    expect(bounds!.x).toBeGreaterThanOrEqual(0)
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width)
+  }
 })
 
 test('seção 9.12 falha de catálogo oferece nova tentativa', async ({ page }) => {

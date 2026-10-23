@@ -23,3 +23,69 @@ body{background:#140d0a;color:#eee3d5;font-size:13px}.site-header{height:62px;ba
 @media(max-width:700px){.detail-skeleton{grid-template-columns:1fr;gap:27px}}
 @media(max-width:400px){.detail-skeleton{gap:18px}}
 .detail-skeleton>div:first-child{width:100%}
+
+:root {
+  --background: #140d0a;
+  --foreground: #f4e9de;
+  --card: #241612;
+  --card-foreground: #f4e9de;
+  --popover: #241612;
+  --popover-foreground: #f4e9de;
+  --primary: #d28a4c;
+  --primary-foreground: #140d0a;
+  --secondary: #36231a;
+  --secondary-foreground: #f4e9de;
+  --muted: #85827b;
+  --muted-foreground: #cbb49d;
+  --shadcn-muted: #392820;
+  --accent: #d28a4c;
+  --accent-foreground: #140d0a;
+  --destructive: #b94739;
+  --destructive-foreground: #fff8f2;
+  --border: #5b4031;
+  --input: #5b4031;
+  --ring: #e7a86f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--shadcn-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+}
+
+:focus-visible {
+  color: inherit;
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+dialog {
+  border-color: var(--border);
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+dialog.mobile-nav-dialog {
+  border-color: var(--border);
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.mobile-nav-dialog::backdrop {
+  background-color: rgb(20 13 10 / 78%);
+}

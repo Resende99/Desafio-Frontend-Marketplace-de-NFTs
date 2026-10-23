@@ -37,7 +37,25 @@ export function SiteHeader() {
           <button className="mobile-menu" aria-label="Abrir menu" aria-haspopup="dialog" onClick={() => menuRef.current?.showModal()}><Menu size={22} /></button>
         </div>
       </div>
-      <dialog className="mobile-nav-dialog" ref={menuRef} aria-labelledby="mobile-nav-title" onClick={event => { if (event.target === event.currentTarget) closeMenu() }}>
+      <dialog
+        className="mobile-nav-dialog"
+        ref={menuRef}
+        aria-labelledby="mobile-nav-title"
+        onClick={event => { if (event.target === event.currentTarget) closeMenu() }}
+        onKeyDown={event => {
+          if (event.key !== 'Tab') return
+          const focusable = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'))
+          const first = focusable[0]
+          const last = focusable[focusable.length - 1]
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault()
+            last?.focus()
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault()
+            first?.focus()
+          }
+        }}
+      >
         <div className="mobile-nav-heading"><h2 id="mobile-nav-title">Menu</h2><button type="button" aria-label="Fechar menu" onClick={closeMenu}><X size={20} /></button></div>
         <nav aria-label="Navegação mobile">
           <a href="/#explorar" onClick={closeMenu}>Início</a><a href="/#explorar" onClick={closeMenu}>Mercado</a>
