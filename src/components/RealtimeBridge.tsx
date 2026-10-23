@@ -10,7 +10,7 @@ interface ResourceEvent { id:string; resource:{id:string;version:number} }
 export function RealtimeBridge(){
   const {user}=useAuth(),client=useQueryClient(),pathname=useRouterState({select:(state)=>state.location.pathname})
   useEffect(()=>{
-    const token=localStorage.getItem('forma.session')
+    const token=localStorage.getItem('kurio.session')
     if(!token||!user||!mocksEnabled)return
     console.info('[Socket client] loading client after MSW startup',{userId:user.id})
     let active=true,socket:Socket|undefined

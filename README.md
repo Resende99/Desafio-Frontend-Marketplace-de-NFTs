@@ -1,4 +1,4 @@
-# Forma — Marketplace de NFTs
+# KURIO — Marketplace de NFTs
 
 Marketplace demonstrativo construído com React, TypeScript, Vite e MSW. Os dados e operações de API são simulados no navegador; não há conexão com blockchain nem backend persistente.
 
@@ -42,7 +42,7 @@ Playwright guarda relatório e traces em `playwright-report/` e `test-results/`.
 
 - Coleção com busca, categorias, ordenação e paginação refletidas na URL; detalhe de obra.
 - Cadastro, login/logout, sessão recuperada após refresh e expiração simulada em 30 minutos; rotas protegidas preservam o retorno.
-- Favoritos otimistas; carrinho de visitante mesclado ao entrar, cupom `FORMA10`, valores calculados com Decimal.js.
+- Favoritos otimistas; carrinho de visitante mesclado ao entrar, cupom `KURIO10`, valores calculados com Decimal.js.
 - Checkout com cotação/versionamento, carteira e rede, chave idempotente, conflito de conteúdo, estados pendente/confirmado/recusado e recibo com snapshot.
 - Perfil, avatar, senha e carteiras; 404 e acesso direto às rotas.
 - Socket.IO de desenvolvimento ligado ao MSW, com eventos de obra e pedido e reconciliação por invalidação REST.
