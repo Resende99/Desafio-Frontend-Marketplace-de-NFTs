@@ -19,10 +19,12 @@ O MSW é iniciado automaticamente em desenvolvimento. O banco de demonstração 
 |---|---|
 | `npm run dev` | Vite com API e WebSocket mockados |
 | `npm run build` | Typecheck e build de produção |
+| `npm run build:demo` | Build de produção com os mocks necessários para a demonstração |
 | `npm run preview` | Servir o build localmente |
 | `npm run typecheck` | Verificar TypeScript |
 | `npm run lint` | Executar ESLint |
 | `npm run test` | Playwright em Chromium desktop e mobile |
+| `npm run test:production` | Build de demonstração e suíte Playwright contra o preview de produção |
 | `npm run test:update` | Atualizar snapshots visuais aprovados |
 | `npm run test:report` | Abrir relatório HTML do Playwright |
 | `npm run lighthouse` | Três medições Lighthouse mobile/desktop e mediana |
@@ -47,8 +49,8 @@ Playwright guarda relatório e traces em `playwright-report/` e `test-results/`.
 
 ## Deploy
 
-O `vercel.json` encaminha as rotas da SPA para `index.html`. Faça deploy do repositório na Vercel com build `npm run build` e diretório de saída `dist`.
+O `vercel.json` define `npm run build:demo` e diretório de saída `dist`, além de encaminhar as rotas da SPA para `index.html`. Esse build ativa o MSW e os fluxos demonstrativos no próprio comando; não depende de variável de ambiente configurada no painel. Para validar localmente o build publicado, execute `npm run test:production`.
 
 ## Limitações e referências
 
-O pacote de referência recebido foi incluído em `DESAFIO.md` e `design/`. A paleta e os principais elementos da tela inicial foram alinhados ao export do Figma; os macacos usados no catálogo foram recortados dos frames fornecidos, pois o pacote não inclui os assets originais em separado. Ainda faltam ajustes de fidelidade em várias telas e completar cenários da seção 9 — consulte [ARCHITECTURE.md](ARCHITECTURE.md). Auth, pagamentos, carteira, API e persistência continuam sendo mocks locais, sem garantias de segurança ou dados entre dispositivos.
+O pacote de referência recebido foi incluído em `DESAFIO.md` e `design/`. A paleta e os principais elementos da tela inicial foram alinhados ao export do Figma; as obras usadas no catálogo foram recortadas dos frames fornecidos, pois o pacote não inclui os assets originais em separado. Consulte [ARCHITECTURE.md](ARCHITECTURE.md) para medições, cobertura e limitações visuais conhecidas. Auth, pagamentos, carteira, API e persistência são demonstrações simuladas no navegador: não há backend persistente, blockchain, pagamento real nem sincronização entre dispositivos. O deploy público deve ser feito na conta Vercel do proprietário do projeto.

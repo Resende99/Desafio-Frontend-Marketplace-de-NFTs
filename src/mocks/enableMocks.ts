@@ -1,4 +1,4 @@
-const mocksEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCKS === 'true'
+export const mocksEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCKS === 'true'
 
 export async function enableMocks() {
   if (mocksEnabled) {

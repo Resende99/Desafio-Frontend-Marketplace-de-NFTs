@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:demo": "node scripts/build-demo.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty",
     "lint": "eslint .",
     "test": "playwright test",
+    "test:production": "npm run build:demo && node scripts/test-production.mjs",
     "test:update": "playwright test --update-snapshots",
     "test:report": "playwright show-report",
     "lighthouse": "node scripts/lighthouse.mjs"

@@ -3,6 +3,7 @@ import type { Socket } from 'socket.io-client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouterState } from '@tanstack/react-router'
 import { useAuth } from '../state/useAuth'
+import { mocksEnabled, mocksReady } from '../mocks/enableMocks'
 
 interface ResourceEvent { id:string; resource:{id:string;version:number} }
 
@@ -10,11 +11,11 @@ export function RealtimeBridge(){
   const {user}=useAuth(),client=useQueryClient(),pathname=useRouterState({select:(state)=>state.location.pathname})
   useEffect(()=>{
     const token=localStorage.getItem('forma.session')
-    if(!token||!user||!import.meta.env.DEV)return
+    if(!token||!user||!mocksEnabled)return
     console.info('[Socket client] loading client after MSW startup',{userId:user.id})
     let active=true,socket:Socket|undefined
     let cleanupListeners=()=>{}
-    void import('socket.io-client').then(({io})=>{
+    void mocksReady.then(()=>import('socket.io-client')).then(({io})=>{
       if(!active)return
       socket=io(window.location.origin,{path:'/socket.io',addTrailingSlash:false,transports:['websocket'],reconnection:true,reconnectionDelay:500})
       const versions=new Map<string,number>(),seen=new Set<string>()
