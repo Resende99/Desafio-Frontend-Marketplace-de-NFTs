@@ -1,0 +1,1 @@
+export function NftSkeleton() { return <div className="skeleton-card"><div className="shimmer skeleton-image" /><div className="skeleton-line shimmer" /><div className="skeleton-line short shimmer" /></div> }

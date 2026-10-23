@@ -1,0 +1,1068 @@
+{
+  "measuredAt": "2026-10-23T01:29:10.317Z",
+  "configuration": {
+    "version": "1.0.1",
+    "buildCommand": "VITE_ENABLE_MOCKS=true npm run build",
+    "server": "vite preview",
+    "routes": [
+      "/",
+      "/nft/nft-001"
+    ],
+    "profiles": [
+      {
+        "name": "mobile",
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 1
+      },
+      {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960,
+        "deviceScaleFactor": 1
+      }
+    ],
+    "categories": [
+      "performance",
+      "accessibility",
+      "best-practices",
+      "seo"
+    ],
+    "runsPerCombination": 3
+  },
+  "environment": {
+    "node": "v24.15.0",
+    "os": "Windows_NT 10.0.19045 x64",
+    "vite": "7.3.7",
+    "playwright": "1.64.1",
+    "lighthouse": "13.5.0",
+    "chromium": "156.0.0.0",
+    "runs": 3,
+    "baseUrl": "http://127.0.0.1:4181"
+  },
+  "measurements": {
+    "mobile-home": {
+      "url": "http://127.0.0.1:4181/",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 2367,
+            "cls": 0,
+            "tbtMs": 61
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 94vw, 40vw\" width=\"250\" height=\"250\" alt=\"NFT de macaco com jaqueta verde\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.hero-inner > div.hero-art > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 8.092
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 9.099
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 11.295
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 403.264
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 390.08799999999997,
+                "scriptingMs": 7.947999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 377.4360000000009,
+                "scriptingMs": 337.0880000000009
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 306.45600000000024,
+                "scriptingMs": 286.3560000000003
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 235.42000000000047,
+                "scriptingMs": 63.77199999999999
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 2340,
+            "cls": 0,
+            "tbtMs": 27
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 94vw, 40vw\" width=\"250\" height=\"250\" alt=\"NFT de macaco com jaqueta verde\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.hero-inner > div.hero-art > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.508
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 8.24
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 8.091
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 340.073
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 315.916,
+                "scriptingMs": 6.867999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 308.3919999999999,
+                "scriptingMs": 276.6639999999999
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 253.60400000000024,
+                "scriptingMs": 236.39200000000025
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 213.18400000000003,
+                "scriptingMs": 52.37199999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 2343,
+            "cls": 0,
+            "tbtMs": 28
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 94vw, 40vw\" width=\"250\" height=\"250\" alt=\"NFT de macaco com jaqueta verde\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.hero-inner > div.hero-art > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.865
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 7.773
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 8.741
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 332.782
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 317.55999999999983,
+                "scriptingMs": 283.55999999999983
+              },
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 304.8639999999999,
+                "scriptingMs": 6.835999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 256.15599999999995,
+                "scriptingMs": 240.24799999999996
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 206.1440000000001,
+                "scriptingMs": 55.34399999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 97,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 2343,
+          "cls": 0,
+          "tbtMs": 28
+        }
+      }
+    },
+    "desktop-home": {
+      "url": "http://127.0.0.1:4181/",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3081,
+            "cls": 0,
+            "tbtMs": 41
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img class=\"card-image\" sizes=\"(max-width: 700px) 46vw, (max-width: 1100px) 30vw, 24vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "a.nft-card > div.card-image-wrap > picture > img.card-image"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.352000122070312
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 4.249999877929688
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 6.783
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 538.567
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4181/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 360.67199999999974,
+                "scriptingMs": 8.431999999999997
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 331.3759999999998,
+                "scriptingMs": 297.4479999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 325.72400000000033,
+                "scriptingMs": 300.80000000000035
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 214.59199999999996,
+                "scriptingMs": 54.127999999999965
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3077,
+            "cls": 0,
+            "tbtMs": 46
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img class=\"card-image\" sizes=\"(max-width: 700px) 46vw, (max-width: 1100px) 30vw, 24vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "a.nft-card > div.card-image-wrap > picture > img.card-image"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.374
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 4.282
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 6.486
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 518.149
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4181/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 332.66399999999976,
+                "scriptingMs": 299.5919999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 290.79200000000026,
+                "scriptingMs": 271.93600000000026
+              },
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 278.724,
+                "scriptingMs": 7.879999999999997
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 210.0560000000001,
+                "scriptingMs": 53.79999999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3080,
+            "cls": 0,
+            "tbtMs": 30
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img class=\"card-image\" sizes=\"(max-width: 700px) 46vw, (max-width: 1100px) 30vw, 24vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "a.nft-card > div.card-image-wrap > picture > img.card-image"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.592
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 4.743
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 7.298
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 511.564
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4181/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 49149
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41728
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/",
+                "totalMs": 336.8959999999997,
+                "scriptingMs": 7.64
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 314.0919999999997,
+                "scriptingMs": 282.0359999999997
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 273.0760000000001,
+                "scriptingMs": 255.7760000000001
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 212.86000000000004,
+                "scriptingMs": 56.42799999999999
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 74,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3080,
+          "cls": 0,
+          "tbtMs": 41
+        }
+      }
+    },
+    "mobile-detail": {
+      "url": "http://127.0.0.1:4181/nft/nft-001",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3000,
+            "cls": 0,
+            "tbtMs": 45
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.568
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 6.786
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 7.075
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 437.785
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 273.1599999999993,
+                "scriptingMs": 247.7599999999993
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 184.8680000000001,
+                "scriptingMs": 55.356
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 175.41599999999997,
+                "scriptingMs": 5.475999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 104.2120000000001,
+                "scriptingMs": 94.4080000000001
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3004,
+            "cls": 0,
+            "tbtMs": 48
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.593999877929687
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 7.634000122070312
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 8.479
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 431.317
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 288.31999999999954,
+                "scriptingMs": 256.61599999999953
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 194.26000000000005,
+                "scriptingMs": 55.184
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 176.35199999999998,
+                "scriptingMs": 5.659999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 101.2520000000002,
+                "scriptingMs": 91.4160000000002
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3007,
+            "cls": 0,
+            "tbtMs": 44
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.238
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 7.104
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 8.359
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 419.956
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 272.87999999999937,
+                "scriptingMs": 246.1239999999993
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 189.252,
+                "scriptingMs": 53.58000000000001
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 157.09199999999998,
+                "scriptingMs": 6.135999999999999
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 91.40800000000016,
+                "scriptingMs": 84.01200000000016
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 94,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3004,
+          "cls": 0,
+          "tbtMs": 45
+        }
+      }
+    },
+    "desktop-detail": {
+      "url": "http://127.0.0.1:4181/nft/nft-001",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3003,
+            "cls": 0,
+            "tbtMs": 48
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 7.12
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 5.394
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 7.437
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 415.924
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 277.97599999999915,
+                "scriptingMs": 248.87999999999917
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 190.32400000000004,
+                "scriptingMs": 54.791999999999994
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 161.73199999999994,
+                "scriptingMs": 5.403999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 99.90000000000015,
+                "scriptingMs": 90.97600000000016
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3004,
+            "cls": 0,
+            "tbtMs": 46
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.149000122070312
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 4.398999877929688
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 6.897
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 406.729
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 279.1199999999991,
+                "scriptingMs": 250.0519999999991
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 189.16800000000018,
+                "scriptingMs": 54.18
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 158.19599999999994,
+                "scriptingMs": 5.492
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 98.54000000000015,
+                "scriptingMs": 89.61200000000015
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 74,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3004,
+            "cls": 0,
+            "tbtMs": 59
+          },
+          "causes": {
+            "lcpElement": {
+              "snippet": "<img sizes=\"(max-width: 700px) 92vw, 55vw\" width=\"250\" height=\"250\" alt=\"Jardim suspenso #01\" loading=\"eager\" fetchpriority=\"high\" decoding=\"sync\" srcset=\"/nfts/emerald-ape.jpg 250w\" src=\"http://127.0.0.1:4181/nfts/emerald-ape.webp\">",
+              "selector": "div.detail-layout > div.detail-image > picture > img"
+            },
+            "lcpDiscovery": {
+              "priorityHinted": true,
+              "requestDiscoverable": true,
+              "eagerlyLoaded": true
+            },
+            "lcpBreakdown": [
+              {
+                "subpart": "timeToFirstByte",
+                "durationMs": 6.464999877929688
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "durationMs": 4.693000122070313
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "durationMs": 7.465
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "durationMs": 423.153
+              }
+            ],
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "wastedBytes": 51885
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "wastedBytes": 41804
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4181/assets/index-NxZBc3Y-.js",
+                "totalMs": 305.8399999999991,
+                "scriptingMs": 275.1839999999991
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 190.6280000000001,
+                "scriptingMs": 53.127999999999986
+              },
+              {
+                "url": "http://127.0.0.1:4181/nft/nft-001",
+                "totalMs": 170.51599999999996,
+                "scriptingMs": 5.515999999999999
+              },
+              {
+                "url": "http://127.0.0.1:4181/assets/browser-CV4tKrwg.js",
+                "totalMs": 97.33200000000018,
+                "scriptingMs": 86.53600000000019
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 74,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3004,
+          "cls": 0,
+          "tbtMs": 48
+        }
+      }
+    }
+  }
+}

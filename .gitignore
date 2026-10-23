@@ -1,0 +1,10 @@
+node_modules
+dist
+test-results
+.env*
+*.tsbuildinfo
+reports/lighthouse/*
+!reports/lighthouse/phase1/
+!reports/lighthouse/phase1/**
+!reports/lighthouse/final/
+!reports/lighthouse/final/**

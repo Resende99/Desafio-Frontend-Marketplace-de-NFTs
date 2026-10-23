@@ -1,0 +1,736 @@
+{
+  "measuredAt": "2026-10-22T16:27:44.870Z",
+  "environment": {
+    "node": "v24.15.0",
+    "os": "Windows_NT 10.0.19045 x64",
+    "lighthouse": "13.5.0",
+    "chromium": "156.0.0.0",
+    "runs": 3,
+    "baseUrl": "http://127.0.0.1:4180"
+  },
+  "measurements": {
+    "mobile-home": {
+      "url": "http://127.0.0.1:4180/",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 91,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3202,
+            "cls": 0,
+            "tbtMs": 58
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 377.48799999999983,
+                "scriptingMs": 318.0319999999998
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 284.1200000000003,
+                "scriptingMs": 264.1560000000003
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 240.95199999999994,
+                "scriptingMs": 7.603999999999997
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 222.0920000000002,
+                "scriptingMs": 57.03199999999997
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 91,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3200,
+            "cls": 0,
+            "tbtMs": 72
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 418.97200000000026,
+                "scriptingMs": 353.4320000000003
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 296.22400000000016,
+                "scriptingMs": 274.05200000000013
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 272.44800000000004,
+                "scriptingMs": 8.931999999999997
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 259.2840000000002,
+                "scriptingMs": 61.79599999999997
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 91,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3175,
+            "cls": 0,
+            "tbtMs": 42
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 356.84,
+                "scriptingMs": 299.97599999999994
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 265.20400000000006,
+                "scriptingMs": 245.97600000000006
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 223.996,
+                "scriptingMs": 7.6039999999999965
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 217.77600000000058,
+                "scriptingMs": 56.98399999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3200,
+          "cls": 0,
+          "tbtMs": 58
+        }
+      }
+    },
+    "desktop-home": {
+      "url": "http://127.0.0.1:4180/",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3081,
+            "cls": 0,
+            "tbtMs": 33
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4180/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 348.83199999999994,
+                "scriptingMs": 308.0879999999999
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 290.35600000000005,
+                "scriptingMs": 271.27200000000005
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 284.56,
+                "scriptingMs": 8.839999999999996
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 241.18399999999988,
+                "scriptingMs": 70.20799999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3081,
+            "cls": 0,
+            "tbtMs": 39
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4180/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 355.15599999999915,
+                "scriptingMs": 312.1079999999991
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 280.18000000000023,
+                "scriptingMs": 261.50400000000025
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 270.40000000000003,
+                "scriptingMs": 8.08
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 231.39200000000008,
+                "scriptingMs": 59.251999999999974
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3079,
+            "cls": 0,
+            "tbtMs": 37
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [
+              {
+                "url": "http://127.0.0.1:4180/nfts/emerald-ape.webp",
+                "wastedBytes": 4849
+              }
+            ],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 49131
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41707
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 364.1159999999999,
+                "scriptingMs": 323.21999999999986
+              },
+              {
+                "url": "http://127.0.0.1:4180/",
+                "totalMs": 339.868,
+                "scriptingMs": 8.839999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 323.6080000000003,
+                "scriptingMs": 301.1600000000003
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 269.8560000000001,
+                "scriptingMs": 80.888
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 72,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3081,
+          "cls": 0,
+          "tbtMs": 37
+        }
+      }
+    },
+    "mobile-detail": {
+      "url": "http://127.0.0.1:4180/nft/nft-001",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 92,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3028,
+            "cls": 0,
+            "tbtMs": 44
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51662
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 301.3119999999989,
+                "scriptingMs": 257.8479999999988
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 207.84400000000014,
+                "scriptingMs": 56.65999999999997
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 120.30799999999999,
+                "scriptingMs": 6.091999999999998
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 116.4280000000002,
+                "scriptingMs": 106.7280000000002
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 92,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3027,
+            "cls": 0,
+            "tbtMs": 56
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51662
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 331.0239999999997,
+                "scriptingMs": 281.0079999999997
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 215.8840000000004,
+                "scriptingMs": 64.33600000000001
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 127.57200000000016,
+                "scriptingMs": 116.47200000000016
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 117.016,
+                "scriptingMs": 7.399999999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 92,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3032,
+            "cls": 0,
+            "tbtMs": 68
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51662
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 363.3400000000009,
+                "scriptingMs": 307.14800000000093
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 244.08000000000044,
+                "scriptingMs": 64.54799999999999
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 147.00399999999996,
+                "scriptingMs": 133.62399999999997
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 125.644,
+                "scriptingMs": 7.195999999999998
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 92,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3028,
+          "cls": 0,
+          "tbtMs": 56
+        }
+      }
+    },
+    "desktop-detail": {
+      "url": "http://127.0.0.1:4180/nft/nft-001",
+      "runs": [
+        {
+          "run": 1,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3027,
+            "cls": 0,
+            "tbtMs": 49
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51892
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 301.57999999999925,
+                "scriptingMs": 261.2999999999992
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 198.4080000000001,
+                "scriptingMs": 58.359999999999985
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 118.96800000000023,
+                "scriptingMs": 108.74000000000024
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 118.056,
+                "scriptingMs": 5.959999999999997
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 2,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3027,
+            "cls": 0,
+            "tbtMs": 48
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51892
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 295.81599999999906,
+                "scriptingMs": 255.17199999999906
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 193.0960000000001,
+                "scriptingMs": 56.31999999999997
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 125.23200000000023,
+                "scriptingMs": 114.19200000000023
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 116.884,
+                "scriptingMs": 5.688
+              }
+            ],
+            "fontDisplay": []
+          }
+        },
+        {
+          "run": 3,
+          "categories": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 96,
+            "seo": 92
+          },
+          "metrics": {
+            "lcpMs": 3023,
+            "cls": 0,
+            "tbtMs": 51
+          },
+          "causes": {
+            "lcpElement": {},
+            "lcpDiscovery": null,
+            "renderBlocking": [],
+            "imageDelivery": [],
+            "unusedJavaScript": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "wastedBytes": 51892
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "wastedBytes": 41699
+              }
+            ],
+            "bootup": [
+              {
+                "url": "http://127.0.0.1:4180/assets/index-Bst1vYdo.js",
+                "totalMs": 301.1199999999993,
+                "scriptingMs": 259.0119999999993
+              },
+              {
+                "url": "Unattributable",
+                "totalMs": 203.33200000000014,
+                "scriptingMs": 58.255999999999986
+              },
+              {
+                "url": "http://127.0.0.1:4180/nft/nft-001",
+                "totalMs": 120.66,
+                "scriptingMs": 5.583999999999999
+              },
+              {
+                "url": "http://127.0.0.1:4180/assets/browser-DSFMv91Y.js",
+                "totalMs": 119.18800000000013,
+                "scriptingMs": 108.54000000000013
+              }
+            ],
+            "fontDisplay": []
+          }
+        }
+      ],
+      "median": {
+        "categories": {
+          "performance": 72,
+          "accessibility": 100,
+          "best-practices": 96,
+          "seo": 92
+        },
+        "metrics": {
+          "lcpMs": 3027,
+          "cls": 0,
+          "tbtMs": 49
+        }
+      }
+    }
+  }
+}
