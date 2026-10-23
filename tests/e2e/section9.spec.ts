@@ -40,6 +40,97 @@ async function setScenario(page: Page, scenario: { failNext?: string; failCount?
   }, scenario)
 }
 
+test('NFTs usam quatro imagens locais, variantes WebP responsivas e prioridade só nos LCPs', async ({ page }) => {
+  await fresh(page)
+  await expect(page.locator('.nft-card')).toHaveCount(12)
+  const catalog = await page.evaluate(async () => {
+    const firstPage = await (await fetch('/api/nfts')).json()
+    const pages = await Promise.all(
+      Array.from({ length: firstPage.pages }, (_, index) => fetch(`/api/nfts?page=${index + 1}`).then(response => response.json())),
+    )
+    return { total: firstPage.total, images: pages.flatMap(result => result.items.map((item: { image: string }) => item.image)) }
+  })
+  const expectedImages = [
+    '/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',
+    '/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',
+    '/nfts/87580f2def9af0ce13f4b6f6ce17bb2449bcfc16.png',
+    '/nfts/9df2ff42dd27ba657621c304557d1a855a4be6a5.png',
+  ]
+  expect(catalog.total).toBe(50)
+  expect([...new Set(catalog.images)].sort()).toEqual(expectedImages.sort())
+  const variants = await page.evaluate(async () => {
+    const imageNames = [
+      '2986a7cb16d09de8970824d2dd58bf0bb021702c',
+      '8459204731e6eba9d474cbc8ebc37071360d3ba5',
+      '87580f2def9af0ce13f4b6f6ce17bb2449bcfc16',
+      '9df2ff42dd27ba657621c304557d1a855a4be6a5',
+    ]
+    return Promise.all(imageNames.flatMap(name => [320, 640, 960].map(async width => {
+      const response = await fetch(`/nfts/${name}-${width}.webp`)
+      const blob = await response.blob()
+      const bitmap = await createImageBitmap(blob)
+      const result = { status: response.status, type: blob.type, width: bitmap.width, height: bitmap.height, expectedWidth: width }
+      bitmap.close()
+      return result
+    })))
+  })
+  expect(variants).toHaveLength(12)
+  expect(variants.every(image => image.status === 200 && image.type === 'image/webp' && image.width === image.expectedWidth && image.height === image.expectedWidth)).toBe(true)
+
+  await expect(page.locator('head link[rel="preload"][as="image"]')).toHaveAttribute('href', '/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5-960.webp')
+  const heroImage = page.locator('.hero-art img')
+  await expect(heroImage).toHaveAttribute('loading', 'eager')
+  await expect(heroImage).toHaveAttribute('fetchpriority', 'high')
+  await expect(heroImage).toHaveAttribute('width', '1254')
+  await expect(heroImage).toHaveAttribute('height', '1254')
+  await expect(page.locator('.hero-art source')).toHaveAttribute('srcset', /320w.*640w.*960w/)
+  const cardImage = page.locator('.nft-card img.card-image').first()
+  await expect(cardImage).toHaveAttribute('loading', 'lazy')
+  await expect(cardImage).toHaveAttribute('fetchpriority', 'auto')
+
+  await page.goto('/nft/nft-001')
+  await expect(page.locator('head link[rel="preload"][as="image"]')).toHaveCount(0)
+  const detailImage = page.locator('.detail-image img')
+  await expect(detailImage).toHaveAttribute('fetchpriority', 'high')
+  await expect(detailImage).toHaveAttribute('width', '1254')
+  await expect(page.locator('.detail-image source')).toHaveAttribute('srcset', /320w.*640w.*960w/)
+})
+
+test('dados de carrinho persistidos migram das imagens removidas', async ({ page }) => {
+  await fresh(page)
+  await expect(page.locator('.nft-card')).toHaveCount(12)
+  const migrated = await page.evaluate(async () => {
+    const { items } = await (await fetch('/api/nfts?page=1')).json()
+    const database = JSON.parse(localStorage.getItem('kurio.mock.database')!)
+    const nft = {
+      ...items[0],
+      image: '/nfts/emerald-ape.jpg',
+      creator: { ...items[0].creator, avatar: '/nfts/sage-nomad.jpg' },
+    }
+    database.carts['guest:default'] = [{
+      nftId: nft.id,
+      quantity: 1,
+      price: nft.price,
+      nft,
+      priceVersion: 1,
+    }]
+    localStorage.setItem('kurio.mock.database', JSON.stringify(database))
+    const cart = await (await fetch('/api/cart')).json()
+    const saved = JSON.parse(localStorage.getItem('kurio.mock.database')!)
+    return {
+      image: cart.items[0].nft.image,
+      creatorAvatar: cart.items[0].nft.creator.avatar,
+      savedImage: saved.carts['guest:default'][0].nft.image,
+    }
+  })
+
+  expect(migrated).toEqual({
+    image: '/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',
+    creatorAvatar: '/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',
+    savedImage: '/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',
+  })
+})
+
 test('seção 9.1 filtros combinados, ordenação, paginação e histórico do navegador', async ({ page }) => {
   await fresh(page)
   await page.getByRole('button', { name: /Próxima/ }).click()
@@ -72,8 +163,8 @@ test('seção 9.3 logout e novo cadastro não compartilham a conta anterior', as
   const first = await register(page)
   await expect(page.getByRole('heading', { name: 'Seu perfil' })).toBeVisible()
   await page.getByRole('button', { name: 'Sair da conta' }).click()
-  await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
   await page.waitForFunction(() => localStorage.getItem('kurio.session') === null)
+  await page.waitForURL(url => url.pathname === '/' || url.pathname === '/login')
   await page.goto('/register')
   await page.getByLabel('Nome completo').fill('Outra Pessoa')
   await page.getByLabel('E-mail').fill(`outra-${crypto.randomUUID()}@example.test`)

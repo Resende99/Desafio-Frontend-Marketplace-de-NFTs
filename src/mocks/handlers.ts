@@ -9,8 +9,8 @@ type MockScenario = { failNext?: string; failCount?: number; delayMs?: number; f
 interface Db { users: StoredUser[]; sessions: Array<{token:string;userId:string;expiresAt:number}>; carts: Record<string,CartItem[]>; coupons: Record<string,{code:string;rate:string}>; favorites: Record<string,string[]>; orders: Order[]; versions:Record<string,number>; availability?:Record<string,boolean>; profiles:Record<string,Partial<User>>; scenario?:MockScenario }
 const DB_KEY='kurio.mock.database'
 const demoUsers:StoredUser[]=[
-  {id:'demo-collector',name:'Colecionador Demo',email:'colecionador@kurio.demo',avatar:'/nfts/emerald-ape.jpg',wallets:[],passwordHash:'4635475e76696ac7af4f68cc1c177db8c9cd201d27107124aaae557ad3d1fb9a'},
-  {id:'demo-artist',name:'Artista Demo',email:'artista@kurio.demo',avatar:'/nfts/sage-nomad.jpg',wallets:[],passwordHash:'4f5fb19787e7ad622a35b14fb0aa8cb2d310f133e96008f25c4884205abb1639'},
+  {id:'demo-collector',name:'Colecionador Demo',email:'colecionador@kurio.demo',avatar:'/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',wallets:[],passwordHash:'4635475e76696ac7af4f68cc1c177db8c9cd201d27107124aaae557ad3d1fb9a'},
+  {id:'demo-artist',name:'Artista Demo',email:'artista@kurio.demo',avatar:'/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',wallets:[],passwordHash:'4f5fb19787e7ad622a35b14fb0aa8cb2d310f133e96008f25c4884205abb1639'},
 ]
 const socketClients=new Map<string,{emit:(event:string,...data:unknown[])=>void;close:()=>void}>(),orderSubscriptions=new Map<string,Set<string>>()
 const socketProtocol=location.protocol==='https:'?'wss':'ws',socketUrl=`${socketProtocol}://${location.host}/socket.io`,socketLink=ws.link(socketUrl)
@@ -43,7 +43,49 @@ const socketHandler=socketLink.addEventListener('connection',(connection)=>{
 function sessionUserId(db:Db,token:string){return db.sessions.find((session)=>session.token===token)?.userId}
 function emitOrder(order:Order){for(const [token,server] of socketClients){if(order.ownerId!==sessionUserId(database(),token)||!orderSubscriptions.get(token)?.has(order.id))continue;server.emit('order.updated',{id:`order:${order.id}:${order.version}`,resource:{id:order.id,version:order.version,order}})}}
 function emitNft(nftId:string){const db=database(),item=nfts.find((nft)=>nft.id===nftId);if(!item)return;const version=db.versions[nftId]??1,event={id:`nft:${nftId}:${version}`,resource:{id:nftId,version,nft:{...item,available:db.availability?.[nftId]??true}}};console.info('[MSW Socket.IO] emit nft.updated',event);for(const server of socketClients.values())server.emit('nft.updated',event)}
-function database():Db { const raw=localStorage.getItem(DB_KEY),db:Db=raw?JSON.parse(raw) as Db:{users:[],sessions:[],carts:{},coupons:{},favorites:{},orders:[],versions:{},profiles:{}};let changed=false;for(const demoUser of demoUsers){if(!db.users.some((user)=>user.email===demoUser.email)){db.users.push({...demoUser,wallets:[]});changed=true}}if(changed||!raw)save(db);return db }
+const legacyNftImages: Record<string, string> = {
+  'cosmic-bloom': '/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',
+  'emerald-ape': '/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',
+  'golden-beat': '/nfts/87580f2def9af0ce13f4b6f6ce17bb2449bcfc16.png',
+  'ivory-baron': '/nfts/9df2ff42dd27ba657621c304557d1a855a4be6a5.png',
+  'neon-vessel': '/nfts/9df2ff42dd27ba657621c304557d1a855a4be6a5.png',
+  'sage-nomad': '/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',
+  'violet-nomad': '/nfts/2986a7cb16d09de8970824d2dd58bf0bb021702c.png',
+}
+function migrateImagePath(path: string): string {
+  const match = path.match(/^\/nfts\/([^/]+?)(?:-180)?\.(?:jpe?g|webp)$/i)
+  return match ? legacyNftImages[match[1]] ?? path : path
+}
+function migrateStoredNftImages(db: Db): boolean {
+  let changed = false
+  const migrate = (path: string) => {
+    const next = migrateImagePath(path)
+    if (next !== path) changed = true
+    return next
+  }
+  const migrateNft = (nft: typeof nfts[number]) => {
+    nft.image = migrate(nft.image)
+    nft.creator.avatar = migrate(nft.creator.avatar)
+  }
+  for (const user of db.users) user.avatar = migrate(user.avatar)
+  for (const cart of Object.values(db.carts)) for (const item of cart) migrateNft(item.nft)
+  for (const order of db.orders) for (const item of order.items) migrateNft(item.nft)
+  for (const profile of Object.values(db.profiles ?? {})) if (profile.avatar) profile.avatar = migrate(profile.avatar)
+  return changed
+}
+function database(): Db {
+  const raw = localStorage.getItem(DB_KEY)
+  const db: Db = raw ? JSON.parse(raw) as Db : { users: [], sessions: [], carts: {}, coupons: {}, favorites: {}, orders: [], versions: {}, profiles: {} }
+  let changed = migrateStoredNftImages(db)
+  for (const demoUser of demoUsers) {
+    if (!db.users.some(user => user.email === demoUser.email)) {
+      db.users.push({ ...demoUser, wallets: [] })
+      changed = true
+    }
+  }
+  if (changed || !raw) save(db)
+  return db
+}
 function save(db:Db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
 function tokenFrom(request:Request){return request.headers.get('authorization')?.replace(/^Bearer\s+/i,'')??''}
 function currentUser(request:Request,db=database()){const token=tokenFrom(request),session=db.sessions.find((item)=>item.token===token&&item.expiresAt>Date.now());return session?db.users.find((user)=>user.id===session.userId):undefined}
@@ -61,7 +103,7 @@ export const handlers = [
   http.get('/api/nfts/:id',async({params})=>{const failed=await scenarioResponse('nft-detail');if(failed)return failed;const db=database(),item=nfts.find((nft)=>nft.id===params.id);return item?HttpResponse.json({...item,version:db.versions[item.id]??1,available:db.availability?.[item.id]??true}):responseError('NFT não encontrado',404)}),
   http.post('/api/mock/nfts/:id/unavailable',({params})=>{const db=database(),nftId=String(params.id);if(!nfts.some(item=>item.id===nftId))return responseError('NFT não encontrado.',404);db.availability={...db.availability,[nftId]:false};db.versions[nftId]=(db.versions[nftId]??1)+1;save(db);emitNft(nftId);return HttpResponse.json({id:nftId,available:false,version:db.versions[nftId]})}),
   http.post('/api/mock/nfts/:id/update',async({params})=>{const db=database(),item=nfts.find((nft)=>nft.id===params.id);if(!item)return responseError('NFT não encontrado.',404);item.price=new Decimal(item.price).plus('0.10').toFixed(2);db.versions[item.id]=(db.versions[item.id]??1)+1;save(db);emitNft(item.id);return HttpResponse.json({...item,version:db.versions[item.id]})}),
-  http.post('/api/auth/register',async({request})=>{const body=await request.json() as {name:string;email:string;passwordHash:string;passwordLength:number},db=database();if(!body.name.trim()||!/^\S+@\S+\.\S+$/.test(body.email)||body.passwordHash.length!==64||body.passwordLength<8)return responseError('Confira nome, e-mail e senha.');if(db.users.some((user)=>user.email===body.email.toLowerCase()))return responseError('Este e-mail já está cadastrado.',409);const user:StoredUser={id:crypto.randomUUID(),name:body.name.trim(),email:body.email.toLowerCase(),avatar:'/nfts/emerald-ape.jpg',wallets:[],passwordHash:body.passwordHash};db.users.push(user);const token=crypto.randomUUID();db.sessions.push({token,userId:user.id,expiresAt:Date.now()+30*60_000});save(db);return HttpResponse.json({token,user:publicUser(user)},{status:201})}),
+  http.post('/api/auth/register',async({request})=>{const body=await request.json() as {name:string;email:string;passwordHash:string;passwordLength:number},db=database();if(!body.name.trim()||!/^\S+@\S+\.\S+$/.test(body.email)||body.passwordHash.length!==64||body.passwordLength<8)return responseError('Confira nome, e-mail e senha.');if(db.users.some((user)=>user.email===body.email.toLowerCase()))return responseError('Este e-mail já está cadastrado.',409);const user:StoredUser={id:crypto.randomUUID(),name:body.name.trim(),email:body.email.toLowerCase(),avatar:'/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',wallets:[],passwordHash:body.passwordHash};db.users.push(user);const token=crypto.randomUUID();db.sessions.push({token,userId:user.id,expiresAt:Date.now()+30*60_000});save(db);return HttpResponse.json({token,user:publicUser(user)},{status:201})}),
   http.post('/api/auth/login',async({request})=>{const body=await request.json() as {email:string;passwordHash:string},db=database(),user=db.users.find((entry)=>entry.email===body.email.toLowerCase()&&entry.passwordHash===body.passwordHash);if(!user)return responseError('E-mail ou senha inválidos.',401);const token=crypto.randomUUID();db.sessions.push({token,userId:user.id,expiresAt:Date.now()+30*60_000});save(db);return HttpResponse.json({token})}),
   http.get('/api/auth/me',({request})=>{const db=database(),user=currentUser(request,db);return user?HttpResponse.json(publicUser(user)):responseError('Sessão expirada.',401)}),
   http.post('/api/auth/logout',({request})=>{const db=database(),token=tokenFrom(request);db.sessions=db.sessions.filter((session)=>session.token!==token);save(db);return new HttpResponse(null,{status:204})}),

@@ -1,4 +1,4 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft, BadgeCheck, Heart, Share2 } from 'lucide-react'
 import Decimal from 'decimal.js'
 import { SiteHeader } from '../components/SiteHeader'
@@ -12,11 +12,15 @@ import { formatEth } from '../lib/utils'
 
 export function NftPage() {
   const { nftId } = useParams({ from: '/nft/$nftId' })
+  const navigate = useNavigate()
   const { data, isLoading, isError } = useNft(nftId)
   const { user } = useAuth()
   const favorite = useFavorite(nftId)
   const cart = useCart({ enabled: false })
-  const addToCart = () => void cart.change({ type: 'add', nftId }).then(() => window.location.assign('/cart'))
+  const addToCart = () => void cart.change({ type: 'add', nftId }).then(async () => {
+    await navigate({ to: '/cart', resetScroll: true })
+    window.scrollTo(0, 0)
+  })
 
   return <>
     <SiteHeader />
@@ -36,7 +40,7 @@ export function NftPage() {
             <span className="eyebrow muted">OBRA DIGITAL · {data.id.toUpperCase()}</span>
             <h1>{data.name}</h1>
             <div className="detail-creator">
-              <img src={data.creator.avatar} alt="" />
+              <NftImage src={data.creator.avatar} alt="" sizes="32px"/>
               <div><small>Criado por</small><strong>{data.creator.name} {data.creator.verified && <BadgeCheck size={16} className="verified" />}</strong></div>
             </div>
             <p className="detail-description">{data.description}</p>

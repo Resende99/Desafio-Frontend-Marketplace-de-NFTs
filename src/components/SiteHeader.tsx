@@ -47,7 +47,7 @@ export function SiteHeader() {
       </dialog>
       {pathname === '/' && <nav className="mobile-bottom-nav" aria-label="Atalhos mobile">
         <Link to="/" search={{ q: undefined, category: undefined, sort: 'recent', page: 1 }} aria-label="Início"><House size={19} /></Link>
-        <a href="/#explorar" aria-label="Buscar obras"><Search size={19} /></a>
+        <a href="/#explorar" aria-label="Abrir busca"><Search size={19} /></a>
         <Link to="/cart" aria-label="Carrinho">
           <img src={shopIcon} alt="" width="20" height="20" />
         </Link>

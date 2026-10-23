@@ -8,10 +8,11 @@ type NftImageProps = {
 }
 
 export function NftImage({ src, alt, sizes, loading = 'lazy', priority = false, className }: NftImageProps) {
-  const webp = src.replace(/\.jpe?g$/i, '.webp')
+  const webpBase = src.replace(/\.(?:jpe?g|png)$/i, '')
+  const webpSrcSet = [320, 640, 960].map(width => `${webpBase}-${width}.webp ${width}w`).join(', ')
   return <picture>
-    <source type="image/webp" srcSet={`${webp.replace(/\.webp$/, '-180.webp')} 180w, ${webp} 250w`} sizes={sizes}/>
-    <img className={className} src={src} srcSet={`${src} 250w`} sizes={sizes} width={250} height={250}
+    <source type="image/webp" srcSet={webpSrcSet} sizes={sizes}/>
+    <img className={className} src={src} srcSet={`${src} 1254w`} sizes={sizes} width={1254} height={1254}
       alt={alt} loading={loading} fetchPriority={priority ? 'high' : 'auto'} decoding={priority ? 'sync' : 'async'}/>
   </picture>
 }

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight, Trash2 } from 'lucide-react'
 import Decimal from 'decimal.js'
 import { SiteHeader } from '../components/SiteHeader'
+import { NftImage } from '../components/NftImage'
 import { useCart } from '../hooks/useCart'
 import { formatEth } from '../lib/utils'
 import { api } from '../lib/api'
@@ -11,6 +12,13 @@ export function CartPage() {
   const { cart, change, isLoading } = useCart()
   const [coupon, setCoupon] = useState('')
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [])
 
   return <>
     <SiteHeader />
@@ -27,7 +35,7 @@ export function CartPage() {
             <span>NFTs</span><span>Preço</span><span>Edições</span><span>Total</span><span />
           </div>
           {cart.items.map(item => <article className="cart-item" key={item.nftId}>
-            <img src={item.nft.image} alt={item.nft.name} />
+            <NftImage className="cart-item-image" src={item.nft.image} alt={item.nft.name} sizes="68px"/>
             <div className="cart-item-info">
               <Link to="/nft/$nftId" params={{ nftId: item.nftId }}>{item.nft.name}</Link>
               <span>{item.nft.creator.name}</span>
