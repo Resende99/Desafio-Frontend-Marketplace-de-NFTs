@@ -7,9 +7,10 @@ import { NftImage } from '../components/NftImage'
 import { useCart } from '../hooks/useCart'
 import { formatEth } from '../lib/utils'
 import { api } from '../lib/api'
+import { QueryErrorState } from '../components/QueryErrorState'
 
 export function CartPage() {
-  const { cart, change, isLoading } = useCart()
+  const { cart, change, isLoading, isError, refetch } = useCart()
   const [coupon, setCoupon] = useState('')
   const [error, setError] = useState('')
 
@@ -25,7 +26,7 @@ export function CartPage() {
     <main className="section-shell cart-page">
       <span className="eyebrow muted">SUA SELEÇÃO</span>
       <h1 className="page-title">Carrinho</h1>
-      {isLoading ? <div className="state-panel">Carregando carrinho…</div> : !cart?.items.length ? <div className="state-panel">
+      {isError ? <QueryErrorState onRetry={() => void refetch()} /> : isLoading ? <div className="state-panel">Carregando carrinho…</div> : !Array.isArray(cart?.items) || cart.items.length === 0 ? <div className="state-panel">
         <h2>Seu carrinho está vazio</h2>
         <p>Descubra uma obra que combine com você.</p>
         <Link to="/" search={{ q: undefined, category: undefined, sort: 'recent', page: 1 }} className="text-button">Explorar coleção</Link>

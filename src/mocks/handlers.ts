@@ -1,12 +1,42 @@
 import { http, HttpResponse, ws } from 'msw'
 import { toSocketIo } from '@mswjs/socket.io-binding'
 import Decimal from 'decimal.js'
+import { z } from 'zod'
 import { nfts } from './fixtures/nfts'
 import type { Cart, CartItem, Order, User } from '../types/domain'
 
 type StoredUser = User & { passwordHash: string }
-type MockScenario = { failNext?: string; failCount?: number; delayMs?: number; failStatus?: number }
-interface Db { users: StoredUser[]; sessions: Array<{token:string;userId:string;expiresAt:number}>; carts: Record<string,CartItem[]>; coupons: Record<string,{code:string;rate:string}>; favorites: Record<string,string[]>; orders: Order[]; versions:Record<string,number>; availability?:Record<string,boolean>; profiles:Record<string,Partial<User>>; scenario?:MockScenario }
+type MockScenario = { failNext?: string; failCount?: number; delayMs?: number; failStatus?: number; invalidNext?: string; invalidFormat?: 'schema' | 'html'; invalidCount?: number }
+const DB_SCHEMA_VERSION = 2
+const storedUserSchema = z.object({
+  id: z.string().min(1), name: z.string().min(1), email: z.string().email(), avatar: z.string().min(1),
+  wallets: z.array(z.object({ id: z.string().min(1), address: z.string(), network: z.enum(['Ethereum', 'Polygon']), primary: z.boolean() })),
+  passwordHash: z.string().length(64),
+})
+const storedNftSchema = z.object({
+  id: z.string().min(1), name: z.string().min(1), description: z.string(), image: z.string().min(1), category: z.enum(['Arte', 'Colecionáveis', 'Música', 'Fotografia', 'Games']), price: z.string(),
+  creator: z.object({ id: z.string().min(1), name: z.string(), avatar: z.string(), verified: z.boolean() }),
+  createdAt: z.string(), likes: z.number().int().nonnegative(), available: z.boolean().optional(), version: z.number().int().positive().optional(),
+})
+const storedCartItemSchema = z.object({ nftId: z.string().min(1), quantity: z.number().int().min(1).max(99), price: z.string(), nft: storedNftSchema, priceVersion: z.number().int().positive() })
+const storedOrderSchema = z.object({
+  id: z.string().min(1), ownerId: z.string().min(1), status: z.enum(['pending', 'confirmed', 'rejected']), items: z.array(storedCartItemSchema).min(1), total: z.string(), wallet: z.string(), network: z.string(), createdAt: z.string(), version: z.number().int().positive(), idempotencyKey: z.string(), contentFingerprint: z.string(),
+})
+const mockScenarioSchema = z.object({ failNext: z.string().optional(), failCount: z.number().int().positive().optional(), delayMs: z.number().nonnegative().optional(), failStatus: z.number().int().min(400).max(599).optional(), invalidNext: z.string().optional(), invalidFormat: z.enum(['schema', 'html']).optional(), invalidCount: z.number().int().positive().optional() })
+const dbSchema = z.object({
+  schemaVersion: z.literal(DB_SCHEMA_VERSION),
+  users: z.array(storedUserSchema),
+  sessions: z.array(z.object({ token: z.string(), userId: z.string(), expiresAt: z.number() })),
+  carts: z.record(z.string(), z.array(storedCartItemSchema)),
+  coupons: z.record(z.string(), z.object({ code: z.string(), rate: z.string() })),
+  favorites: z.record(z.string(), z.array(z.string())),
+  orders: z.array(storedOrderSchema),
+  versions: z.record(z.string(), z.number().int().positive()),
+  availability: z.record(z.string(), z.boolean()),
+  profiles: z.record(z.string(), z.object({ id: z.string().optional(), name: z.string().optional(), email: z.string().optional(), avatar: z.string().optional(), wallets: z.array(storedUserSchema.shape.wallets.element).optional() })),
+  scenario: mockScenarioSchema.optional(),
+})
+interface Db { schemaVersion: 2; users: StoredUser[]; sessions: Array<{token:string;userId:string;expiresAt:number}>; carts: Record<string,CartItem[]>; coupons: Record<string,{code:string;rate:string}>; favorites: Record<string,string[]>; orders: Order[]; versions:Record<string,number>; availability:Record<string,boolean>; profiles:Record<string,Partial<User>>; scenario?:MockScenario }
 const DB_KEY='kurio.mock.database'
 const demoUsers:StoredUser[]=[
   {id:'demo-collector',name:'Colecionador Demo',email:'colecionador@kurio.demo',avatar:'/nfts/8459204731e6eba9d474cbc8ebc37071360d3ba5.png',wallets:[],passwordHash:'4635475e76696ac7af4f68cc1c177db8c9cd201d27107124aaae557ad3d1fb9a'},
@@ -73,9 +103,36 @@ function migrateStoredNftImages(db: Db): boolean {
   for (const profile of Object.values(db.profiles ?? {})) if (profile.avatar) profile.avatar = migrate(profile.avatar)
   return changed
 }
+function createEmptyDatabase(): Db {
+  return { schemaVersion: DB_SCHEMA_VERSION, users: [], sessions: [], carts: {}, coupons: {}, favorites: {}, orders: [], versions: {}, availability: {}, profiles: {} }
+}
+function resetPersistedDemo() {
+  localStorage.removeItem(DB_KEY)
+  localStorage.removeItem('kurio.session')
+  localStorage.removeItem('kurio.session.expiresAt')
+  sessionStorage.clear()
+}
 function database(): Db {
   const raw = localStorage.getItem(DB_KEY)
-  const db: Db = raw ? JSON.parse(raw) as Db : { users: [], sessions: [], carts: {}, coupons: {}, favorites: {}, orders: [], versions: {}, profiles: {} }
+  let db: Db
+  if (!raw) {
+    db = createEmptyDatabase()
+  } else {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(raw)
+    } catch {
+      parsed = undefined
+    }
+    const result = dbSchema.safeParse(parsed)
+    if (result.success) {
+      db = result.data
+    } else {
+      console.warn('[MSW] Persisted demo database is outdated or invalid; resetting to the current schema.')
+      resetPersistedDemo()
+      db = createEmptyDatabase()
+    }
+  }
   let changed = migrateStoredNftImages(db)
   for (const demoUser of demoUsers) {
     if (!db.users.some(user => user.email === demoUser.email)) {
@@ -86,17 +143,17 @@ function database(): Db {
   if (changed || !raw) save(db)
   return db
 }
-function save(db:Db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
+function save(db:Db){localStorage.setItem(DB_KEY,JSON.stringify(dbSchema.parse(db)))}
 function tokenFrom(request:Request){return request.headers.get('authorization')?.replace(/^Bearer\s+/i,'')??''}
 function currentUser(request:Request,db=database()){const token=tokenFrom(request),session=db.sessions.find((item)=>item.token===token&&item.expiresAt>Date.now());return session?db.users.find((user)=>user.id===session.userId):undefined}
 function publicUser(user:StoredUser):User { return {id:user.id,name:user.name,email:user.email,avatar:user.avatar,wallets:user.wallets} }
 function responseError(message:string,status=400){return HttpResponse.json({message},{status})}
-async function scenarioResponse(key:string,signal?:AbortSignal){const db=database(),scenario=db.scenario;if(scenario?.delayMs)await new Promise(resolve=>setTimeout(resolve,scenario.delayMs));if(signal?.aborted)return responseError(`Requisição cancelada antes de concluir: ${key}`,503);if(scenario?.failNext===key){scenario.failCount=(scenario.failCount??1)-1;if(scenario.failCount<=0)delete scenario.failNext;save(db);return responseError(`Falha simulada: ${key}`,scenario.failStatus??503)}return null}
+async function scenarioResponse(key:string,signal?:AbortSignal){const db=database(),scenario=db.scenario;if(scenario?.delayMs)await new Promise(resolve=>setTimeout(resolve,scenario.delayMs));if(signal?.aborted)return responseError(`Requisição cancelada antes de concluir: ${key}`,503);if(scenario?.failNext===key){scenario.failCount=(scenario.failCount??1)-1;if(scenario.failCount<=0){delete scenario.failNext;delete scenario.failCount}save(db);return responseError(`Falha simulada: ${key}`,scenario.failStatus??503)}if(scenario?.invalidNext===key){scenario.invalidCount=(scenario.invalidCount??1)-1;if(scenario.invalidCount<=0){delete scenario.invalidNext;delete scenario.invalidCount}save(db);if(scenario.invalidFormat==='html')return new HttpResponse('<!doctype html><html><body>SPA fallback</body></html>',{headers:{'Content-Type':'text/html'}});return HttpResponse.json({items:null,total:0,page:1,pages:1})}return null}
 function cartFor(db:Db,key:string):Cart { const items=db.carts[key]??[],subtotal=items.reduce((sum,item)=>sum.plus(new Decimal(item.price).mul(item.quantity)),new Decimal(0)),coupon=db.coupons[key],rate=new Decimal(coupon?.rate??'0'),discount=subtotal.mul(rate).div(100),fee=subtotal.mul('0.025'),total=subtotal.minus(discount).plus(fee);return {items,coupon:coupon?.code,subtotal:subtotal.toFixed(2),discount:discount.toFixed(2),fee:fee.toFixed(2),total:total.toFixed(2)} }
 function cartKey(request:Request,db:Db){return currentUser(request,db)?.id??`guest:${request.headers.get('x-guest-id')??'default'}`}
 export const handlers = [
   socketHandler,
-  http.post('/api/mock/scenario',async({request})=>{const scenario=await request.json() as MockScenario;if(scenario.failStatus!==undefined&&(!Number.isInteger(scenario.failStatus)||scenario.failStatus<400||scenario.failStatus>599))return responseError('O status simulado deve ficar entre 400 e 599.',422);if(scenario.failCount!==undefined&&(!Number.isInteger(scenario.failCount)||scenario.failCount<1))return responseError('A quantidade de falhas deve ser um inteiro positivo.',422);if(scenario.delayMs!==undefined&&(!Number.isFinite(scenario.delayMs)||scenario.delayMs<0))return responseError('A latência deve ser um número não negativo.',422);const db=database();db.scenario=scenario;save(db);return HttpResponse.json({ok:true})}),
+  http.post('/api/mock/scenario',async({request})=>{const parsed=mockScenarioSchema.safeParse(await request.json());if(!parsed.success)return responseError('Formato de cenário inválido.',422);const db=database();db.scenario=parsed.data;save(db);return HttpResponse.json({ok:true})}),
   http.post('/api/mock/socket/events',async({request})=>{const body=await request.json() as {events:Array<{id:string;resource:{id:string;version:number;nft?:unknown}}>};for(const socket of socketClients.values())for(const event of body.events)socket.emit('nft.updated',event);return HttpResponse.json({emitted:body.events.length})}),
   http.post('/api/mock/socket/disconnect',()=>{for(const socket of socketClients.values())socket.close();return HttpResponse.json({disconnected:true})}),
   http.get('/api/nfts',async({request})=>{const failed=await scenarioResponse('nfts');if(failed)return failed;const db=database(),url=new URL(request.url),q=url.searchParams.get('q')?.toLocaleLowerCase('pt-BR')??'',category=url.searchParams.get('category')??'',sort=url.searchParams.get('sort')??'recent',page=Math.max(1,Number(url.searchParams.get('page')??1)),pageSize=12;const filtered=nfts.filter((item)=>item.name.toLocaleLowerCase('pt-BR').includes(q)&&(!category||item.category===category));if(sort==='price-asc')filtered.sort((a,b)=>new Decimal(a.price).comparedTo(b.price)??0);if(sort==='price-desc')filtered.sort((a,b)=>new Decimal(b.price).comparedTo(a.price)??0);if(sort==='popular')filtered.sort((a,b)=>b.likes-a.likes);const pages=Math.max(1,Math.ceil(filtered.length/pageSize));return HttpResponse.json({items:filtered.slice((page-1)*pageSize,page*pageSize).map(item=>({...item,available:db.availability?.[item.id]??true})),total:filtered.length,page,pages})}),
@@ -109,7 +166,7 @@ export const handlers = [
   http.post('/api/auth/logout',({request})=>{const db=database(),token=tokenFrom(request);db.sessions=db.sessions.filter((session)=>session.token!==token);save(db);return new HttpResponse(null,{status:204})}),
   http.patch('/api/profile',async({request})=>{const db=database(),user=currentUser(request,db);if(!user)return responseError('Sessão expirada.',401);const changes=await request.json() as Partial<User>;if(changes.name!==undefined&&!changes.name.trim())return responseError('O nome não pode ficar vazio.');Object.assign(user,{name:changes.name?.trim()??user.name,avatar:changes.avatar??user.avatar});save(db);return HttpResponse.json(publicUser(user))}),
   http.post('/api/profile/password',async({request})=>{const db=database(),user=currentUser(request,db);if(!user)return responseError('Sessão expirada.',401);const body=await request.json() as {currentHash:string;newHash:string;newLength:number};if(user.passwordHash!==body.currentHash)return responseError('A senha atual não confere.',422);if(body.newHash.length!==64||body.newLength<8)return responseError('A nova senha precisa ter pelo menos 8 caracteres.',422);user.passwordHash=body.newHash;save(db);return new HttpResponse(null,{status:204})}),
-  http.get('/api/cart',({request})=>{const db=database();return HttpResponse.json(cartFor(db,cartKey(request,db)))}),
+  http.get('/api/cart',async({request})=>{const failed=await scenarioResponse('cart');if(failed)return failed;const db=database();return HttpResponse.json(cartFor(db,cartKey(request,db)))}),
   http.post('/api/cart/items',async({request})=>{const db=database(),key=cartKey(request,db),body=await request.json() as {nftId:string},nft=nfts.find((item)=>item.id===body.nftId);if(!nft)return responseError('Esta obra não está disponível.',404);if(db.availability?.[nft.id]===false)return responseError('Esta obra não está mais disponível.',409);const items=db.carts[key]??[];if(items.some((item)=>item.nftId===nft.id))return HttpResponse.json(cartFor(db,key));items.push({nftId:nft.id,quantity:1,price:nft.price,nft:{...nft,available:true},priceVersion:db.versions[nft.id]??1});db.carts[key]=items;save(db);return HttpResponse.json(cartFor(db,key),{status:201})}),
   http.delete('/api/cart/items/:id',({request,params})=>{const db=database(),key=cartKey(request,db);db.carts[key]=(db.carts[key]??[]).filter((item)=>item.nftId!==params.id);save(db);return HttpResponse.json(cartFor(db,key))}),
   http.patch('/api/cart/items/:id',async({request,params})=>{const db=database(),key=cartKey(request,db),body=await request.json() as {quantity:number},quantity=Math.floor(body.quantity);if(!Number.isFinite(quantity)||quantity<1||quantity>99)return responseError('A quantidade deve ficar entre 1 e 99.',422);const item=(db.carts[key]??[]).find(entry=>entry.nftId===params.id);if(!item)return responseError('Item não encontrado no carrinho.',404);item.quantity=quantity;save(db);return HttpResponse.json(cartFor(db,key))}),

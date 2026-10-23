@@ -11,7 +11,7 @@ export function SiteHeader() {
   const { cart, isError: cartError } = useCart()
   const menuRef = useRef<HTMLDialogElement>(null)
   const pathname = useRouterState({ select: state => state.location.pathname })
-  const cartCount = cart?.items.reduce((total, item) => total + item.quantity, 0)
+  const cartCount = Array.isArray(cart?.items) ? cart.items.reduce((total, item) => total + item.quantity, 0) : undefined
 
   const closeMenu = () => menuRef.current?.close()
 

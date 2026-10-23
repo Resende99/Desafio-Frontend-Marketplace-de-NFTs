@@ -1,7 +1,8 @@
 import { createRootRoute, createRoute, createRouter, lazyRouteComponent } from '@tanstack/react-router'
 import { RootLayout } from './components/RootLayout'
+import { AppError } from './components/AppError'
 import { RoutePending } from './components/RoutePending'
-const rootRoute = createRootRoute({ component: RootLayout })
+const rootRoute = createRootRoute({ component: RootLayout, errorComponent: AppError })
 const homePageComponent = lazyRouteComponent(() => import('./routes/HomePage'), 'HomePage')
 const nftPageComponent = lazyRouteComponent(() => import('./routes/NftPage'), 'NftPage')
 // Warm only the route requested by the initial document while the app runtime starts.

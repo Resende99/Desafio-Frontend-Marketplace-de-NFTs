@@ -34,7 +34,7 @@ async function checkout(page: Page, walletChar = 'a') {
   await page.getByLabel('Endereço da carteira').fill(`0x${walletChar.repeat(40)}`)
 }
 
-async function setScenario(page: Page, scenario: { failNext?: string; failCount?: number; delayMs?: number; failStatus?: number }) {
+async function setScenario(page: Page, scenario: { failNext?: string; failCount?: number; delayMs?: number; failStatus?: number; invalidNext?: string; invalidFormat?: 'schema' | 'html'; invalidCount?: number }) {
   await page.evaluate(async value => {
     await fetch('/api/mock/scenario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) })
   }, scenario)
@@ -486,6 +486,45 @@ test('seção 9.12 falha de catálogo oferece nova tentativa', async ({ page }) 
   await setScenario(page, {})
   await page.getByRole('button', { name: 'Tentar novamente' }).click()
   await expect(page.locator('.nft-card')).toHaveCount(10)
+})
+
+test('banco local de versão antiga reseta para a demonstração atual', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('.nft-card')).toHaveCount(12)
+  await page.evaluate(() => {
+    localStorage.setItem('kurio.mock.database', JSON.stringify({
+      schemaVersion: 1, users: [], sessions: [], carts: {}, coupons: {}, favorites: {}, orders: [], versions: {}, profiles: {},
+    }))
+    localStorage.setItem('kurio.session', 'legacy-session')
+    sessionStorage.setItem('kurio.order.key', 'legacy-order')
+  })
+  await page.reload()
+  await expect(page.locator('.nft-card')).toHaveCount(12)
+  const state = await page.evaluate(() => ({
+    version: JSON.parse(localStorage.getItem('kurio.mock.database')!).schemaVersion,
+    token: localStorage.getItem('kurio.session'),
+    orderKey: sessionStorage.getItem('kurio.order.key'),
+  }))
+  expect(state).toEqual({ version: 2, token: null, orderKey: null })
+  await page.goto('/cart')
+  await expect(page.getByText('Seu carrinho está vazio')).toBeVisible()
+})
+
+test('respostas malformadas e fallback HTML mostram erro recuperável no carrinho', async ({ page }) => {
+  await page.goto('/cart')
+  await expect(page.getByText('Seu carrinho está vazio')).toBeVisible()
+
+  for (const invalidFormat of ['schema', 'html'] as const) {
+    await setScenario(page, { invalidNext: 'cart', invalidFormat, invalidCount: 2 })
+    await page.reload()
+    const alert = page.getByRole('alert')
+    await expect(alert.getByRole('heading', { name: 'Não foi possível carregar' })).toBeVisible()
+    await expect(alert.getByRole('button', { name: 'Tentar novamente' })).toBeVisible()
+    await expect(page.getByText('Something went wrong!')).toHaveCount(0)
+    await setScenario(page, {})
+    await alert.getByRole('button', { name: 'Tentar novamente' }).click()
+    await expect(page.getByText('Seu carrinho está vazio')).toBeVisible()
+  }
 })
 
 test('latência controlada mantém skeleton até o catálogo concluir', async ({ page }) => {

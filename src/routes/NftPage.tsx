@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { AxiosError } from 'axios'
 import { ArrowLeft, BadgeCheck, Heart, Share2 } from 'lucide-react'
 import Decimal from 'decimal.js'
 import { SiteHeader } from '../components/SiteHeader'
@@ -9,11 +10,13 @@ import { useFavorite } from '../hooks/useFavorite'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../state/useAuth'
 import { formatEth } from '../lib/utils'
+import { QueryErrorState } from '../components/QueryErrorState'
 
 export function NftPage() {
   const { nftId } = useParams({ from: '/nft/$nftId' })
   const navigate = useNavigate()
-  const { data, isLoading, isError } = useNft(nftId)
+  const { data, error, isLoading, isError, refetch } = useNft(nftId)
+  const isNotFound = isError && error instanceof AxiosError && error.response?.status === 404
   const { user } = useAuth()
   const favorite = useFavorite(nftId)
   const cart = useCart({ enabled: false })
@@ -26,7 +29,7 @@ export function NftPage() {
     <SiteHeader />
     <main className="detail-page">
       <Link to="/" search={{ q: undefined, category: undefined, sort: 'recent', page: 1 }} className="back-link"><ArrowLeft size={16} /> Voltar para explorar</Link>
-      {isLoading ? <DetailSkeleton /> : isError || !data ? <div className="state-panel">
+      {isLoading ? <DetailSkeleton /> : isError && !isNotFound ? <QueryErrorState onRetry={() => void refetch()} /> : !data ? <div className="state-panel">
         <h2>Esta obra não está disponível</h2>
         <p>O link pode estar incorreto ou a peça foi removida.</p>
         <Link to="/" search={{ q: undefined, category: undefined, sort: 'recent', page: 1 }} className="text-button">Voltar à coleção</Link>
@@ -56,7 +59,7 @@ export function NftPage() {
               </button>
               <button onClick={() => void navigator.clipboard?.writeText(window.location.href)}><Share2 size={17} /> Compartilhar</button>
             </div>
-            {favorite.error && <p role="alert" className="form-error">{favorite.error}</p>}
+            {favorite.error && <p role="alert" className="form-error">{favorite.error}{favorite.queryError&&<> <button className="text-button" onClick={()=>void favorite.refetch()}>Tentar novamente</button></>}</p>}
             <div className="detail-meta"><span>Rede</span><strong>Ethereum</strong><span>Padrão</span><strong>ERC-721</strong><span>Token ID</span><strong>{data.id}</strong></div>
           </div>
         </div>
