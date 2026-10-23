@@ -459,6 +459,9 @@ test('auth, filtros e recibo permanecem utilizáveis em larguras mobile, tablet 
     await page.goto('/')
     await expect(page.locator('.toolbar')).toBeVisible()
     await expect(page.locator('.category-row')).toBeVisible()
+    const sort = page.getByLabel('Ordenação')
+    await expect(sort.locator('option').first()).toHaveCSS('background-color', 'rgb(36, 22, 18)')
+    await expect(sort.locator('option').first()).toHaveCSS('color', 'rgb(238, 227, 213)')
   }
 
   await addToCart(page, 'nft-001')

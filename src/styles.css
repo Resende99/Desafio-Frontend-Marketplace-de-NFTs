@@ -74,6 +74,15 @@ body{background:#140d0a;color:#eee3d5;font-size:13px}.site-header{height:62px;ba
   outline-offset: 3px;
 }
 
+select {
+  color-scheme: dark;
+}
+
+select option {
+  color: #eee3d5;
+  background-color: #241612;
+}
+
 dialog {
   border-color: var(--border);
   color: var(--popover-foreground);
