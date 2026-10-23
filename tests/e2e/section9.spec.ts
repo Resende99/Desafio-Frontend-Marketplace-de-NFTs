@@ -147,6 +147,8 @@ test('seção 9.5 remove item, aplica cupom e mantém carrinho após refresh', a
 })
 
 test('seção 9.6 compra confirma recibo e remove apenas os NFTs comprados', async ({ page }) => {
+  const messages: string[] = []
+  page.on('console', message => messages.push(message.text()))
   await fresh(page)
   await page.locator('.nft-card').first().click()
   await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click()
@@ -155,8 +157,10 @@ test('seção 9.6 compra confirma recibo e remove apenas os NFTs comprados', asy
   await checkout(page, 'b')
   await page.getByRole('button', { name: 'Confirmar compra' }).click()
   await expect(page.getByText('Pagamento pendente')).toBeVisible()
+  await expect.poll(() => messages.filter(message => message.includes('order.updated received')).length).toBeGreaterThan(0)
   await page.getByRole('button', { name: 'Simular confirmação do pagamento' }).click()
   await expect(page.getByText('Compra confirmada')).toBeVisible()
+  await expect.poll(() => messages.filter(message => message.includes('order.updated received')).length).toBeGreaterThan(1)
   await page.goto('/cart')
   await expect(page.getByText('Seu carrinho está vazio')).toBeVisible()
 })
