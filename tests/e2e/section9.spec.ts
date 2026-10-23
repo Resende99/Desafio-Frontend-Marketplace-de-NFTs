@@ -129,6 +129,51 @@ test('seção 9.4 erro ao salvar favorito restaura o estado anterior', async ({ 
   await expect(page.getByRole('button', { name: /favoritos/ })).not.toHaveAttribute('aria-pressed', 'true')
 })
 
+test('carrinho visitante aparece em todos os breakpoints, persiste e mescla ao entrar', async ({ page }) => {
+  await fresh(page)
+  const email = `cart-${crypto.randomUUID()}@example.test`
+  const password = 'SenhaSegura123'
+
+  await page.goto('/register')
+  await page.getByLabel('Nome completo').fill('Pessoa de Carrinho')
+  await page.getByLabel('E-mail').fill(email)
+  await page.getByLabel('Senha').fill(password)
+  await page.getByRole('button', { name: 'Criar conta' }).click()
+  await expect(page.getByRole('heading', { name: 'Seu perfil' })).toBeVisible()
+  await page.getByRole('button', { name: 'Sair da conta' }).click()
+  await page.waitForFunction(() => localStorage.getItem('kurio.session') === null)
+
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    const cartLink = page.locator('.cart-header')
+    await expect(cartLink).toBeVisible()
+    await expect(cartLink.locator('.cart-count')).toHaveText('0')
+  }
+
+  await addToCart(page, 'nft-001')
+  await expect(page.locator('.cart-header .cart-count')).toHaveText('1')
+  await page.goto('/cart')
+  await expect(page.locator('.cart-item')).toHaveCount(1)
+  await page.reload()
+  await expect(page.locator('.cart-item')).toHaveCount(1)
+
+  await page.goto('/login')
+  await page.getByLabel('E-mail').fill(email)
+  await page.getByLabel('Senha').fill(password)
+  await page.getByRole('button', { name: 'Entrar' }).click()
+  await expect(page.getByRole('heading', { name: 'Seu perfil' })).toBeVisible()
+  await page.goto('/cart')
+  await expect(page.locator('.cart-item')).toHaveCount(1)
+  await expect(page.locator('.cart-header .cart-count')).toHaveText('1')
+
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ width, height: 900 })
+    await expect(page.locator('.cart-header')).toBeVisible()
+    await expect(page.locator('.cart-header .cart-count')).toHaveText('1')
+  }
+})
+
 test('seção 9.5 remove item, aplica cupom e mantém carrinho após refresh', async ({ page }) => {
   await fresh(page)
   await addToCart(page, 'nft-002')

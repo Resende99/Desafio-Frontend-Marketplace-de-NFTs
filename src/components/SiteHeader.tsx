@@ -1,11 +1,17 @@
 import { useRef } from 'react'
 import { Link } from '@tanstack/react-router'
-import { ShoppingBag, Menu, Search, X } from 'lucide-react'
+import { Menu, Search, X, House, UserRound } from 'lucide-react'
 import { useAuth } from '../state/useAuth'
+import { useRouterState } from '@tanstack/react-router'
+import { useCart } from '../hooks/useCart'
+import shopIcon from '../../design/icones/mobile/Shop.svg'
 
 export function SiteHeader() {
   const { user } = useAuth()
+  const { cart, isError: cartError } = useCart()
   const menuRef = useRef<HTMLDialogElement>(null)
+  const pathname = useRouterState({ select: state => state.location.pathname })
+  const cartCount = cart?.items.reduce((total, item) => total + item.quantity, 0)
 
   const closeMenu = () => menuRef.current?.close()
 
@@ -18,7 +24,15 @@ export function SiteHeader() {
         </nav>
         <div className="header-actions">
           <a href="/#explorar" className="icon-button" aria-label="Buscar"><Search size={18} /></a>
-          <Link to="/cart" className="icon-button cart-header" aria-label="Sacola"><ShoppingBag size={18} /></Link>
+          <Link
+            to="/cart"
+            className="icon-button cart-header"
+            aria-label={cartError ? 'Sacola: falha ao carregar o contador' : `Sacola: ${cartCount ?? 'carregando'} itens`}
+            aria-busy={!cart && !cartError}
+          >
+            <img src={shopIcon} alt="" width="20" height="20" />
+            {(cart || cartError) && <span className="cart-count">{cartError ? '!' : cartCount}</span>}
+          </Link>
           {user ? <Link className="connect-button" to="/profile">Minha conta</Link> : <Link className="connect-button" to="/login" search={{ returnTo: undefined }}>Entrar</Link>}
           <button className="mobile-menu" aria-label="Abrir menu" aria-haspopup="dialog" onClick={() => menuRef.current?.showModal()}><Menu size={22} /></button>
         </div>
@@ -31,6 +45,14 @@ export function SiteHeader() {
           <Link to="/cart" onClick={closeMenu}>Sacola</Link>
         </nav>
       </dialog>
+      {pathname === '/' && <nav className="mobile-bottom-nav" aria-label="Atalhos mobile">
+        <Link to="/" search={{ q: undefined, category: undefined, sort: 'recent', page: 1 }} aria-label="Início"><House size={19} /></Link>
+        <a href="/#explorar" aria-label="Buscar obras"><Search size={19} /></a>
+        <Link to="/cart" aria-label="Carrinho">
+          <img src={shopIcon} alt="" width="20" height="20" />
+        </Link>
+        <Link to="/profile" aria-label="Meu perfil"><UserRound size={19} /></Link>
+      </nav>}
     </header>
   )
 }
