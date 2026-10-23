@@ -34,7 +34,7 @@ async function checkout(page: Page, walletChar = 'a') {
   await page.getByLabel('Endereço da carteira').fill(`0x${walletChar.repeat(40)}`)
 }
 
-async function setScenario(page: Page, scenario: { failNext?: string; failCount?: number; delayMs?: number }) {
+async function setScenario(page: Page, scenario: { failNext?: string; failCount?: number; delayMs?: number; failStatus?: number }) {
   await page.evaluate(async value => {
     await fetch('/api/mock/scenario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) })
   }, scenario)
@@ -81,6 +81,42 @@ test('seção 9.3 logout e novo cadastro não compartilham a conta anterior', as
   await page.getByRole('button', { name: 'Criar conta' }).click()
   await expect(page.getByRole('heading', { name: 'Seu perfil' })).toBeVisible()
   await expect(page.locator('input[readonly]')).not.toHaveValue(first)
+})
+
+test('contas demo pré-configuradas aceitam login e mantêm perfis independentes', async ({ page }) => {
+  await fresh(page)
+  for (const account of [
+    { email: 'colecionador@kurio.demo', password: 'Colecionador#2026', name: 'Colecionador Demo' },
+    { email: 'artista@kurio.demo', password: 'Artista#2026', name: 'Artista Demo' },
+  ]) {
+    await page.goto('/login')
+    await page.getByLabel('E-mail').fill(account.email)
+    await page.getByLabel('Senha').fill(account.password)
+    await page.getByRole('button', { name: 'Entrar' }).click()
+    await expect(page.getByLabel('Nome', { exact: true })).toHaveValue(account.name)
+    if (account.email !== 'artista@kurio.demo') {
+      await page.getByRole('button', { name: 'Sair da conta' }).click()
+      await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
+    }
+  }
+})
+
+test('cenários de mock permitem simular respostas 4xx e 5xx', async ({ page }) => {
+  await fresh(page)
+  await expect(page.locator('.nft-card')).toHaveCount(12)
+  const statuses = await page.evaluate(async () => {
+    const configure = (status: number) => fetch('/api/mock/scenario', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ failNext: 'nfts', failStatus: status }),
+    })
+    await configure(422)
+    const clientError = (await fetch('/api/nfts')).status
+    await configure(503)
+    const serverError = (await fetch('/api/nfts')).status
+    return [clientError, serverError]
+  })
+  expect(statuses).toEqual([422, 503])
 })
 
 test('seção 9.4 erro ao salvar favorito restaura o estado anterior', async ({ page }) => {
