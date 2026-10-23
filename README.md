@@ -91,16 +91,16 @@ Playwright grava o relatório HTML em `playwright-report/` e resultados/traces d
 
 ## Medianas Lighthouse de produção
 
-Build demo local servido por Vite Preview, três execuções independentes por combinação, medidas em 22/10/2026. Os detalhes de ferramenta, ambiente e relatórios por execução estão em `reports/lighthouse/final/`; baseline e comparação estão em `reports/lighthouse/phase1/`.
+Build demo local servido por Vite Preview, três execuções independentes por combinação, medidas em 23/10/2026 após a migração das imagens. Os detalhes de ferramenta, ambiente e relatórios por execução estão em `reports/lighthouse/final/`; baseline e comparação estão em `reports/lighthouse/phase1/`.
 
 | Tela | Perfil | Performance | Acessibilidade | Boas práticas | SEO | LCP (ms) | CLS | TBT (ms) |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| Início | Mobile | 97 | 100 | 96 | 92 | 2.343 | 0 | 28 |
-| Início | Desktop | 74 | 100 | 96 | 92 | 3.080 | 0 | 41 |
-| Detalhe | Mobile | 94 | 100 | 96 | 92 | 3.004 | 0 | 45 |
-| Detalhe | Desktop | 74 | 100 | 96 | 92 | 3.004 | 0 | 48 |
+| Início | Mobile | 96 | 100 | 96 | 92 | 2.632 | 0 | 57 |
+| Início | Desktop | 77 | 100 | 96 | 92 | 2.560 | 0 | 46 |
+| Detalhe | Mobile | 93 | 100 | 96 | 92 | 3.079 | 0 | 39 |
+| Detalhe | Desktop | 75 | 100 | 96 | 92 | 2.996 | 0 | 41 |
 
-LCP abaixo de 2,5 s foi atingido somente na home mobile. No desktop e no detalhe, o diagnóstico atribui o atraso principalmente à renderização/montagem da rota, não à transferência da imagem. A justificativa completa, medições antes/depois e limitações estão em [ARCHITECTURE.md](./ARCHITECTURE.md).
+LCP abaixo de 2,5 s não foi atingido nesta rodada. No detalhe, a imagem só é descoberta depois da resposta da API; transferência e TTFB são curtos em comparação com o atraso de descoberta/renderização. A justificativa completa, medições antes/depois e limitações estão em [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Publicação
 

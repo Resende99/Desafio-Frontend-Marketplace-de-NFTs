@@ -164,7 +164,7 @@ test('seção 9.3 logout e novo cadastro não compartilham a conta anterior', as
   await expect(page.getByRole('heading', { name: 'Seu perfil' })).toBeVisible()
   await page.getByRole('button', { name: 'Sair da conta' }).click()
   await page.waitForFunction(() => localStorage.getItem('kurio.session') === null)
-  await page.waitForURL(url => url.pathname === '/' || url.pathname === '/login')
+  await page.waitForURL(url => url.pathname === '/' || url.pathname === '/login', { waitUntil: 'commit' })
   await page.goto('/register')
   await page.getByLabel('Nome completo').fill('Outra Pessoa')
   await page.getByLabel('E-mail').fill(`outra-${crypto.randomUUID()}@example.test`)
@@ -186,8 +186,11 @@ test('contas demo pré-configuradas aceitam login e mantêm perfis independentes
     await page.getByRole('button', { name: 'Entrar' }).click()
     await expect(page.getByLabel('Nome', { exact: true })).toHaveValue(account.name)
     if (account.email !== 'artista@kurio.demo') {
-      await page.getByRole('button', { name: 'Sair da conta' }).click()
-      await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
+      await Promise.all([
+        page.waitForURL(url => url.pathname === '/' || url.pathname === '/login', { waitUntil: 'commit' }),
+        page.getByRole('button', { name: 'Sair da conta' }).click(),
+      ])
+      await page.waitForFunction(() => localStorage.getItem('kurio.session') === null)
     }
   }
 })
